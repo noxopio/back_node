@@ -1,3 +1,8 @@
+/*
+ Rutas de Usuario / Auth 
+ host +/api/auth
+*/
+
 const express = require('express');
 require('dotenv').config();
 //crear el servidor de express
