@@ -1,26 +1,36 @@
 const { Router } = require('express');
+const { check } = require('express-validator');
+
 const router = Router();
-const { crearUsuario } = require('../controllers/auth')
+const { crearUsuario, loginUsuario, revalidarToken } = require('../controllers/auth')
 
 //rutas
 // router.get('/', (req, res) => {
 //     res.send('Hello, World!');
 // });
-router.post('/new',crearUsuario);
+router.post(
+    '/new',
+    [
+        check('name', 'El nombre es obligatorio').not().isEmpty(),
+        check('email', 'El email es obligatorio').isEmail(),
+        check('password', 'El password es obligatorio y debe tener al menos 6 caracteres').isLength({ min: 6 })
+    ],
+    crearUsuario
+);
 
 
-router.post('/', (req, res) => {
-    res.json({
-        ok: true,
-        msg: 'Usuario autenticado exitosamente'
-    })
-});
-router.get('/renew', (req, res) => {
-    res.json({
-        ok: true,
-        msg: 'renew'
-    })
-});
+router.post(
+    
+    '/',
+    [
+        check('email', 'El email es obligatorio').isEmail(),
+        check('password', 'El password es obligatorio y debe tener al menos 6 caracteres').isLength({ min: 6 })
+    ],
+    
+    
+    loginUsuario);
+
+router.get('/renew', revalidarToken);
 
 
 module.exports = router;
