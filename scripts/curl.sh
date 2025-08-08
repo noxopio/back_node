@@ -15,22 +15,19 @@ fi
 # Set the API endpoint URL
 PORT=$1
 METHOD=$2
-ENDPOINT=${3:-"/"}  # Tercer parámetro opcional, default "/"
+ENDPOINT=${3:-"/"}
 
-# Asegurar que ENDPOINT comience con "/"
 if [[ "$ENDPOINT" != /* ]]; then
     ENDPOINT="/$ENDPOINT"
 fi
 
-DATA_FILE_NAME=${4:-"data.json"}  # Cuarto parámetro opcional, default "data.json"
+DATA_FILE_NAME=${4:-"data.json"} 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DATA_FILE="$SCRIPT_DIR/$DATA_FILE_NAME"
 API_URL="http://localhost:$PORT/api/auth$ENDPOINT"
 
-RESPONSE_FILE="$SCRIPT_DIR/response.json"
 
 # Make the API request using curl
-
  printf "${CIAN}  %-10s %-60s ${RESET}\n" "enviando solicitud $METHOD a $API_URL"
 echo "Usando archivo de datos: $DATA_FILE"
 
@@ -50,14 +47,3 @@ fi
 eval $CURL_CMD
 
 echo ""
-# printf "${CIAN}  %-10s %-60s ${RESET}\n" "RESPUESTA GUARDADA EN $RESPONSE_FILE"
-# echo "Contenido del archivo de respuesta:"
-# if [ -f "$RESPONSE_FILE" ] && [ -s "$RESPONSE_FILE" ]; then
-#     cat "$RESPONSE_FILE"
-# else
-#     echo "⚠️  El archivo de respuesta está vacío o no existe"
-#     echo "Esto puede indicar que:"
-#     echo "  - El servidor no está corriendo en el puerto $PORT"
-#     echo "  - El endpoint $API_URL no existe"
-#     echo "  - Hay un problema de conectividad"
-# fi
