@@ -6,9 +6,9 @@ RESET="\e[0m"
 if [ $# -lt 2 ]; then
     echo "Uso: $0 <PUERTO> <METODO> [ENDPOINT] [DATA_FILE]"
     echo "Ejemplos:"
-    echo "  $0 4001 POST /new register-data.json  # Para crear usuario"
-    echo "  $0 4001 POST / login-data.json        # Para login"
-    echo "  $0 4001 GET /renew                    # Para renovar token (sin datos)"
+    echo "  $0 4001 POST new register-data.json   # Para crear usuario (/api/auth/new)"
+    echo "  $0 4001 POST / login-data.json        # Para login (/api/auth/)"  
+    echo "  $0 4001 GET renew                     # Para renovar token (/api/auth/renew)"
     exit 1
 fi
 
@@ -16,6 +16,12 @@ fi
 PORT=$1
 METHOD=$2
 ENDPOINT=${3:-"/"}  # Tercer parámetro opcional, default "/"
+
+# Asegurar que ENDPOINT comience con "/"
+if [[ "$ENDPOINT" != /* ]]; then
+    ENDPOINT="/$ENDPOINT"
+fi
+
 DATA_FILE_NAME=${4:-"data.json"}  # Cuarto parámetro opcional, default "data.json"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DATA_FILE="$SCRIPT_DIR/$DATA_FILE_NAME"
